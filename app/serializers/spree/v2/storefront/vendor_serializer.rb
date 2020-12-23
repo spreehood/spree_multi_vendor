@@ -4,7 +4,9 @@ module Spree
       class VendorSerializer < BaseSerializer
         set_type :vendor
 
-        attributes :name, :about_us
+        attributes :name, :about_us, :slug, :state, :contact_us
+
+        has_many :products
       end
     end
   end
