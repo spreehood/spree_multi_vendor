@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::V2::Storefront::VendorSerializer do
-  let(:vendor) { create(:vendor, name: 'Test', about_us: 'Hello World') }
+  let(:vendor) { create(:vendor, name: 'Test', about_us: 'Hello World', contact_us: "Contact Us", slug: "slug") }
 
   subject { described_class.new(vendor) }
 
@@ -11,10 +11,20 @@ describe Spree::V2::Storefront::VendorSerializer do
       {
         data: {
           id: vendor.id.to_s,
-          type: :vendor,
+          relationships: {
+            image: {
+              data: nil,
+              products: {
+                data: []
+              }
+            },
+            type: vendor
+          },
           attributes: {
             name: 'Test',
-            about_us: 'Hello World'
+            contact_us: "Contact Us",
+            about_us: 'Hello World',
+            slug: "slug"
           }
         }
       }
