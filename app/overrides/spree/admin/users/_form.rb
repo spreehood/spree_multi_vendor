@@ -11,3 +11,12 @@ Deface::Override.new(
           <% end %>
         HTML
 )
+
+module Spree
+    module Admin
+        module Users
+            class Form
+            end
+        end
+    end
+end
