@@ -53,6 +53,10 @@ module Spree
       update(notification_email: email)
     end
 
+    def self.user_vendors(user)
+      user.vendors
+    end
+
     private
 
     def create_stock_location
