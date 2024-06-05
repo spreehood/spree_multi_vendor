@@ -18,6 +18,10 @@ Spree::Core::Engine.routes.draw do
     namespace :v2 do
       namespace :storefront do
         resources :vendors, only: %i[show index create update destroy]
+
+        namespace :account do
+          resources :vendors, controller: :user_vendors, only: %i[index]
+        end
       end
     end
   end
