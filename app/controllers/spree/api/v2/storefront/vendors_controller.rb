@@ -3,7 +3,7 @@ module Spree
     module V2
       module Storefront
         class VendorsController < ::Spree::Api::V2::ResourceController
-          before_action :require_spree_current_user, only: %i[create update]
+          before_action :require_spree_current_user, only: %i[create update destroy]
           before_action :load_vendor, only: %i[update destroy]
 
           def create
