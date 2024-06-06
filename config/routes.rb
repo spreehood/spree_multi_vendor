@@ -23,6 +23,12 @@ Spree::Core::Engine.routes.draw do
           resources :vendors, controller: :user_vendors, only: %i[index]
         end
       end
+
+      namespace :vendor, only: [] do
+        resources :vendors do
+          resources :stock_locations, only: %i[index show update]
+        end
+      end
     end
   end
 end
