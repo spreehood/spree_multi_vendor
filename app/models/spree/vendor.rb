@@ -57,6 +57,14 @@ module Spree
       user.vendors
     end
 
+    def product_questions
+      Spree::ProductQuestion.joins(product: :vendor).where(spree_products: { vendor_id: id })
+    end
+
+    def reviews
+      Spree::Review.joins(product: :vendor).where(spree_products: { vendor_id: id })
+    end
+
     private
 
     def create_stock_location
