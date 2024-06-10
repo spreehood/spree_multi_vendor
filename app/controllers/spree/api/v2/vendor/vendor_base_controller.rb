@@ -6,7 +6,7 @@ module Spree
           protected
 
           def load_vendor
-            @vendor = Spree::Vendor.find(params[:vendor_id])
+            @vendor = Spree::Vendor.friendly.find(params[:vendor_id])
           end
 
           def require_vendor_access
