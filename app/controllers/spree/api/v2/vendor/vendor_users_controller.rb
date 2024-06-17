@@ -18,7 +18,7 @@ module Spree
             if user
               create_vendor_user(user)
             else
-              render_error_payload('Please ')
+              render_error_payload(user.errors)
             end
           end
 
