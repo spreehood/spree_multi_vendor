@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'API V2 Storefront Vendor Spec', type: :request do
+describe Spree::Api::V2::Storefront::VendorsController, type: :request do
 
   let!(:vendor_image) { create(:vendor_image) }
   let!(:vendor) { create(:active_vendor, name: 'vendor', image: vendor_image) }
@@ -52,7 +52,6 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
     end
   end
 
-
   describe 'vendors#index' do
     context 'returns vendors list' do
 
@@ -70,7 +69,6 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
         json_response = JSON.parse(response.body)
         expect(json_response)
         expect(json_response['data'].count).to eq (6)
-        
       end
 
       it 'can control paging size' do
@@ -80,7 +78,6 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
         expect(json_response)
         expect(json_response['data'].count).to eq (10)
       end
-
 
       it 'returns data type vendor' do
         get "/api/v2/storefront/vendors"
@@ -112,6 +109,69 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
         expect(json_response.keys).to contain_exactly('data', 'included',"links", "meta")
 
         expect(json_response['included'].second['id']).to eq(vendor_image.id.to_s)
+      end
+    end
+  end
+
+  describe 'vendor creation actions' do
+    before do
+      allow_any_instance_of(described_class).to receive(:require_spree_current_user).and_return(true)
+      allow_any_instance_of(described_class).to receive(:spree_current_user).and_return(user)
+    end
+
+    describe 'vendors#create' do
+      let(:vendor_params) { { vendor: { name: 'Vendor test' } } }
+      let!(:user) { create(:user) }
+
+      context 'with valid params' do
+        before { post '/api/v2/storefront/vendors', params: vendor_params }
+
+        it_behaves_like 'returns 200 HTTP status'
+
+        it 'creates a new vendor' do
+          json_response = JSON.parse(response.body)
+          expect(json_response['data']['attributes']['name']).to eq('Vendor test')
+        end
+      end
+
+      context 'with invalid params' do
+        before { post '/api/v2/storefront/vendors', params: { vendor: { name: '' } } }
+
+        it_behaves_like 'returns 422 HTTP status'
+      end
+    end
+
+    describe 'vendors#update' do
+      let(:vendor_params) { { vendor: { name: 'Vendor update!' } } }
+      let!(:vendor) { create(:vendor) }
+      let!(:user) { create(:user) }
+      let!(:vendor_user) { create(:vendor_user, vendor: vendor, user: user) }
+
+      context 'with valid params' do
+        before { patch "/api/v2/storefront/vendors/#{vendor.slug}", params: vendor_params }
+
+        it_behaves_like 'returns 200 HTTP status'
+
+        it 'updates the vendor' do
+          json_response = JSON.parse(response.body)
+          expect(json_response['data']['attributes']['name']).to eq('Vendor update!')
+        end
+      end
+    end
+
+    describe 'vendors#destroy' do
+      let!(:vendor) { create(:vendor) }
+      let!(:user) { create(:user) }
+      let!(:vendor_user) { create(:vendor_user, vendor: vendor, user: user) }
+
+      context 'with valid params' do
+        before { delete "/api/v2/storefront/vendors/#{vendor.slug}" }
+
+        it_behaves_like 'returns 200 HTTP status'
+
+        it 'deletes the vendor' do
+          expect(Spree::Vendor.find_by(id: vendor.id)).to be_nil
+        end
       end
     end
   end
