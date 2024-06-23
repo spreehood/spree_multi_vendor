@@ -56,7 +56,8 @@ module Spree
           end
 
           def vendor_params
-            params.require(:vendor).permit(Spree::PermittedAttributes.vendor_attributes)
+            params.require(:vendor).permit(:name, :about_us, :contact_us, :notification_email,
+                                           image_attributes: [:attachment])
           end
 
           def load_vendor
