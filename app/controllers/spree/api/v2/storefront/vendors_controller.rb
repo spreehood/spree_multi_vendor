@@ -40,7 +40,7 @@ module Spree
           end
 
           def scope
-            ::Spree::Vendor.active
+            ::Spree::Vendor
           end
 
           def resource
