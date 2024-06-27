@@ -28,6 +28,8 @@ Spree::Core::Engine.routes.draw do
         resources :vendors do
           resources :stock_locations, only: %i[index show update]
           resources :users, controller: :vendor_users, only: %i[index create destroy]
+          resources :product_questions, only: %i[index show update destroy]
+          resources :reviews, only: %i[index show update destroy]
         end
       end
     end

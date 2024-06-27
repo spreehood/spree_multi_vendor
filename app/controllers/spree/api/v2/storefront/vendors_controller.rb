@@ -44,7 +44,7 @@ module Spree
           end
 
           def resource
-            scope.find_by(slug: params[:id]) || scope.find(params[:id])
+            scope.friendly.find(params[:id])
           end
 
           def resource_serializer
@@ -60,7 +60,7 @@ module Spree
           end
 
           def load_vendor
-            @vendor = Spree::Vendor.find(params[:id])
+            @vendor = Spree::Vendor.friendly.find(params[:id])
           end
 
           def create_vendor_user(vendor)
