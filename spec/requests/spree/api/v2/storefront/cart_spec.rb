@@ -13,6 +13,10 @@ describe 'API V2 Storefront Cart Spec', type: :request do
 
   include_context 'API v2 tokens'
 
+  def json_response
+    JSON.parse(response.body)
+  end
+
   describe 'cart#show' do
     let(:params) { {} }
     let!(:line_item) { create(:line_item, order: order, product: product, variant: product.default_variant) }
@@ -35,10 +39,10 @@ describe 'API V2 Storefront Cart Spec', type: :request do
         get '/api/v2/storefront/cart', headers: headers_bearer, params: params
 
         expect(json_response['data']).to have_relationships(:vendors, :vendor_totals)
-        expect(json_response[:included][0]).to have_id(vendor.id.to_s)
-        expect(json_response[:included][0]).to have_type('vendor')
-        expect(json_response[:included][1]).to have_id(vendor.id.to_s)
-        expect(json_response[:included][1]).to have_type('vendor_totals')
+        expect(json_response['included'][0]).to have_id(vendor.id.to_s)
+        expect(json_response['included'][0]).to have_type('vendor')
+        expect(json_response['included'][1]).to have_id(vendor.id.to_s)
+        expect(json_response['included'][1]).to have_type('vendor_totals')
       end
     end
 
@@ -65,20 +69,20 @@ describe 'API V2 Storefront Cart Spec', type: :request do
 
       it 'via variants' do
         get '/api/v2/storefront/cart', params: { include: 'variants.vendor' }, headers: headers_bearer
-        expect(json_response[:included][0]).to have_id(vendor.id.to_s)
-        expect(json_response[:included][0]).to have_type('vendor')
+        expect(json_response['included'][0]).to have_id(vendor.id.to_s)
+        expect(json_response['included'][0]).to have_type('vendor')
       end
 
       it 'via products' do
         get '/api/v2/storefront/cart', params: { include: 'variants.product.vendor' }, headers: headers_bearer
-        expect(json_response[:included][0]).to have_id(vendor.id.to_s)
-        expect(json_response[:included][0]).to have_type('vendor')
+        expect(json_response['included'][0]).to have_id(vendor.id.to_s)
+        expect(json_response['included'][0]).to have_type('vendor')
       end
 
       it 'via line_items' do
         get '/api/v2/storefront/cart', params: { include: 'line_items.vendor' }, headers: headers_bearer
-        expect(json_response[:included][0]).to have_id(vendor.id.to_s)
-        expect(json_response[:included][0]).to have_type('vendor')
+        expect(json_response['included'][0]).to have_id(vendor.id.to_s)
+        expect(json_response['included'][0]).to have_type('vendor')
       end
     end
   end

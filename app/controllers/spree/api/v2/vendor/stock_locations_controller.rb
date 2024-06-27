@@ -22,11 +22,33 @@ module Spree
             end
           end
 
+          # POST /api/v2/vendor/vendors/:vendor_id/stock_locations
+          def create
+            stock_location = @vendor.stock_locations.new(stock_location_params)
+
+            if stock_location.save
+              render_serialized_payload { serialize_resource(stock_location) }
+            else
+              render_error_payload(stock_location.errors)
+            end
+          end
+
           # PUT/PATCH /api/v2/vendor/vendors/:vendor_id/stock_locations/:id
           def update
             stock_location = Spree::StockLocation.find(params[:id])
 
             if stock_location.update(stock_location_params)
+              render_serialized_payload { serialize_resource(stock_location) }
+            else
+              render_error_payload(stock_location.errors)
+            end
+          end
+
+          # DELETE /api/v2/vendor/vendors/:vendor_id/stock_locations/:id
+          def destroy
+            stock_location = Spree::StockLocation.find(params[:id])
+
+            if stock_location.destroy
               render_serialized_payload { serialize_resource(stock_location) }
             else
               render_error_payload(stock_location.errors)

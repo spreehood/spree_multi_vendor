@@ -14,6 +14,10 @@ describe 'API V2 Storefront Products Spec', type: :request do
     end
   end
 
+  def json_response
+    JSON.parse(response.body)
+  end
+
   describe 'products#index' do
     context 'with no params' do
       before { get '/api/v2/storefront/products' }
