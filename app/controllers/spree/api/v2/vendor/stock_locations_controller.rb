@@ -2,23 +2,20 @@ module Spree
   module Api
     module V2
       module Vendor
-        class StockLocationsController < Spree::Api::V2::ResourceController
-          before_action :require_spree_current_user
+        class StockLocationsController < VendorBaseController
           before_action :load_vendor
+          before_action :require_vendor_access
 
           # GET /api/v2/vendor/vendors/:vendor_id/stock_locations
           def index
-            if check_vendor_access
-              render_serialized_payload { serialize_collection(paginated_collection) }
-            else
-              render_error_payload(paginated_collection.errors)
-            end
+            render_serialized_payload { serialize_collection(paginated_collection) }
           end
 
           # GET /api/v2/vendor/vendors/:vendor_id/stock_locations/:id
           def show
             stock_location = Spree::StockLocation.find(params[:id])
-            if stock_location && check_vendor_access
+
+            if stock_location
               render_serialized_payload { serialize_resource(stock_location) }
             else
               render_error_payload(stock_location.errors)
@@ -28,7 +25,8 @@ module Spree
           # PUT/PATCH /api/v2/vendor/vendors/:vendor_id/stock_locations/:id
           def update
             stock_location = Spree::StockLocation.find(params[:id])
-            if check_vendor_access && stock_location.update(stock_location_params)
+
+            if stock_location.update(stock_location_params)
               render_serialized_payload { serialize_resource(stock_location) }
             else
               render_error_payload(stock_location.errors)
@@ -37,12 +35,8 @@ module Spree
 
           private
 
-          def load_vendor
-            @vendor = Spree::Vendor.find(params[:vendor_id])
-          end
-
-          def check_vendor_access
-            @vendor.users.include?(spree_current_user)
+          def serialize_collection(collection)
+            collection_serializer.new(collection, include: %i[vendor country]).serializable_hash
           end
 
           def paginated_collection
