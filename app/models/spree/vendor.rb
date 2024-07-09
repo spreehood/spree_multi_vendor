@@ -30,6 +30,8 @@ module Spree
       end
     end
 
+    accepts_nested_attributes_for :image
+
     has_many :users, through: :vendor_users, class_name: Spree.user_class.to_s
 
     after_create :create_stock_location
