@@ -6,7 +6,7 @@ describe Spree::Api::V2::Storefront::Account::UserVendorsController, type: :requ
   let!(:vendor_user) { create(:vendor_user, vendor: vendor, user: user) }
 
   before do
-    create(:vendor_user, vendor: create(:active_vendor, name: 'Test Vendor'), user: user)
+    create(:vendor_user, vendor: create(:active_vendor, name: FFaker::Company.name), user: user)
 
     allow_any_instance_of(described_class).to receive(:require_spree_current_user).and_return(true)
     allow_any_instance_of(described_class).to receive(:spree_current_user).and_return(user)

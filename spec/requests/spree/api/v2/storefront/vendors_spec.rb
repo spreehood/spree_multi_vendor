@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Spree::Api::V2::Storefront::VendorsController, type: :request do
 
   let!(:vendor_image) { create(:vendor_image) }
-  let!(:vendor) { create(:active_vendor, name: 'vendor', image: vendor_image) }
+  let!(:vendor) { create(:active_vendor, name: FFaker::Company.name, image: vendor_image) }
+  let(:vendor_params) { { vendor: { name: FFaker::Company.name } } }
+  let!(:user) { create(:user) }
   let!(:product) { create(:product, vendor: vendor) }
   let!(:vendors) { 
     create_list(:active_vendor_list, 30)}
@@ -120,9 +122,6 @@ describe Spree::Api::V2::Storefront::VendorsController, type: :request do
     end
 
     describe 'vendors#create' do
-      let(:vendor_params) { { vendor: { name: 'Vendor test' } } }
-      let!(:user) { create(:user) }
-
       context 'with valid params' do
         before { post '/api/v2/storefront/vendors', params: vendor_params }
 
@@ -130,7 +129,7 @@ describe Spree::Api::V2::Storefront::VendorsController, type: :request do
 
         it 'creates a new vendor' do
           json_response = JSON.parse(response.body)
-          expect(json_response['data']['attributes']['name']).to eq('Vendor test')
+          expect(json_response['data']['attributes']['name']).to eq(vendor_params[:vendor][:name])
         end
       end
 
