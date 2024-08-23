@@ -16,7 +16,7 @@ module Spree
           private
 
           def serialize_collection(collection)
-            collection_serializer.new(collection).serializable_hash
+            collection_serializer.new(collection, { params: { vendor_id: @vendor.id } }).serializable_hash
           end
 
           def paginated_collection

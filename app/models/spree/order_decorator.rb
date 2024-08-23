@@ -1,9 +1,17 @@
 # frozen_string_literal: true
 
-Spree::Order.class_eval do
-  def self.for_vendor(vendor)
-    joins(:products)
-      .where(products: { vendor_id: vendor.id })
-      .distinct
+module Spree
+  module OrderDecorator
+    def self.prepended(base)
+      base.class_eval do
+        def self.for_vendor(vendor)
+          joins(:products)
+            .where(products: { vendor_id: vendor.id })
+            .distinct
+        end
+      end
+    end
   end
 end
+
+Spree::Order.prepend Spree::OrderDecorator

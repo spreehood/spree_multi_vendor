@@ -17,7 +17,13 @@ module Spree
                    :store_owner_notification_delivered, :public_metadata, :private_metadata,
                    :internal_note, :preferences, :state_machine_resumed
 
-        has_many :products, serializer: Spree::V2::Storefront::ProductSerializer
+        attribute :has_other_vendor_products do |order, params|
+          order.products.where.not(vendor_id: params[:vendor_id]).exists?
+        end
+
+        has_many :line_items, serializer: Spree::V2::Storefront::LineItemSerializer do |order, params|
+          order.line_items.joins(variant: :product).where(spree_products: { vendor_id: params[:vendor_id] })
+        end
       end
     end
   end
