@@ -20,8 +20,5 @@ Spree::Core::Engine.routes.draw do
         resources :vendors, only: [:show,:index]
       end
     end
-    namespace :v1 do
-      resources :vendors
-    end
   end
 end

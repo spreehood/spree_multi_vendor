@@ -4,3 +4,11 @@ Deface::Override.new(
     replace: "erb[loud]:contains('order.display_total.to_html')",
     text: "<%= current_spree_vendor ? order.display_vendor_total(current_spree_vendor).to_html : order.display_total.to_html %>"
 )
+module Spree
+    module Admin
+        module Orders
+            class Index
+            end
+        end
+    end
+end

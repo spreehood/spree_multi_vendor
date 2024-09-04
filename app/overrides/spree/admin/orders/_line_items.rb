@@ -4,3 +4,12 @@ Deface::Override.new(
     replace: "erb[silent]:contains('order.line_items.each do |item|')",
     text: "<% (current_spree_vendor ? order.line_items.for_vendor(current_spree_vendor) : order.line_items).each do |item| %>"
 )
+
+module Spree
+    module Admin
+        module Orders
+            class LineItems
+            end
+        end
+    end
+end

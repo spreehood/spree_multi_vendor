@@ -33,3 +33,14 @@ Deface::Override.new(
           </tr>
     HTML
 )
+
+module Spree
+    module Admin
+        module Shared
+            class OrderSummary
+            end
+        end
+    end
+end
+
+
