@@ -9,4 +9,4 @@ module SpreeMultiVendor
 end
 
 # Prepend the decorator to the ProductSerializer
-Spree::V2::Storefront::ProductSerializer.prepend(Spree::V2::Storefront::ProductSerializerDecorator)
+Spree::V2::Storefront::ProductSerializer.prepend(SpreeMultiVendor::ProductSerializerDecorator)
